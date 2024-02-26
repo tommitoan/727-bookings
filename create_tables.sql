@@ -177,6 +177,9 @@ CREATE TABLE public.users (
     first_name character varying(255) DEFAULT ''::character varying NOT NULL,
     last_name character varying(255) DEFAULT ''::character varying NOT NULL,
     email character varying(255) NOT NULL,
+    birth_date date NOT NULL,
+    birth_hour date NOT NULL,
+
     password character varying(60) NOT NULL,
     access_level integer DEFAULT 1 NOT NULL,
     created_at timestamp without time zone NOT NULL,

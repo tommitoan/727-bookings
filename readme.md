@@ -2,6 +2,12 @@
 - A folk repo from [tsawler/bookings](https://github.com/tsawler/bookings)
 - Vietnameseization
 
+# How to run
+```
+chmod +x ./run.sh
+./run.sh
+```
+
 # Bookings and Reservations
 
 This is the repository for my bookings and reservations project, which is part of 
