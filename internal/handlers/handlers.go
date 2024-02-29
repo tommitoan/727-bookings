@@ -49,7 +49,7 @@ func NewHandlers(r *Repository) {
 	Repo = r
 }
 
-//Home is the home page handler
+// Home is the home page handler
 func (m *Repository) Home(w http.ResponseWriter, r *http.Request) {
 	render.Template(w, r, "home.page.tmpl", &models.TemplateData{})
 }
@@ -64,14 +64,14 @@ func (m *Repository) About(w http.ResponseWriter, r *http.Request) {
 func (m *Repository) Reservation(w http.ResponseWriter, r *http.Request) {
 	res, ok := m.App.Session.Get(r.Context(), "reservation").(models.Reservation)
 	if !ok {
-		m.App.Session.Put(r.Context(), "error", "can't get reservation from session")
+		m.App.Session.Put(r.Context(), "error", "Ngày đặt lịch không khả dụng!")
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
 
 	room, err := m.DB.GetRoomByID(res.RoomID)
 	if err != nil {
-		m.App.Session.Put(r.Context(), "error", "can't find room!")
+		m.App.Session.Put(r.Context(), "error", "Dịch vụ không khả dụng!")
 		http.Redirect(w, r, "/", http.StatusSeeOther)
 		return
 	}
@@ -331,8 +331,8 @@ func (m *Repository) AvailabilityJSON(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	sd := r.Form.Get("start")
-	ed := r.Form.Get("end")
+	sd := r.Form.Get("book")
+	ed := r.Form.Get("birth")
 
 	layout := "2006-01-02"
 	startDate, _ := time.Parse(layout, sd)

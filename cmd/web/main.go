@@ -19,6 +19,13 @@ import (
 
 const portNumber = ":8080"
 
+type WebAPI struct {
+	app      config.AppConfig
+	session  *scs.SessionManager
+	infoLog  *log.Logger
+	errorLog *log.Logger
+}
+
 var app config.AppConfig
 var session *scs.SessionManager
 var infoLog *log.Logger

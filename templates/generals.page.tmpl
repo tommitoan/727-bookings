@@ -5,7 +5,7 @@
 
         <div class="row">
             <div class="col">
-                <img src="/static/images/generals-quarters.png"
+                <img src="/static/images/background-0.jpeg"
                      class="img-fluid img-thumbnail mx-auto d-block room-image" alt="room image">
             </div>
         </div>
@@ -13,7 +13,7 @@
 
         <div class="row">
             <div class="col">
-                <h1 class="text-center mt-4">General's Quarters</h1>
+                <h1 class="text-center mt-4">Lá Số Bát Tự</h1>
                 <p>
                     Your home away form home, set on the majestic waters of the Atlantic Ocean, this will be a vacation
                     to remember.
@@ -36,7 +36,7 @@
 
             <div class="col text-center">
 
-                <a id="check-availability-button" href="#!" class="btn btn-success">Check Availability</a>
+                <a id="check-availability-button" href="#!" class="btn btn-danger">Đặt Lịch & Lập Lá Số</a>
 
             </div>
         </div>
@@ -54,10 +54,10 @@
         <div class="col">
             <div class="form-row" id="reservation-dates-modal">
                 <div class="col">
-                    <input disabled required class="form-control" type="text" name="start" id="start" placeholder="Arrival">
+                    <input disabled class="form-control" type="text" name="book" id="book" placeholder="Booking a Date..." autocomplete="off">
                 </div>
                 <div class="col">
-                    <input disabled required class="form-control" type="text" name="end" id="end" placeholder="Departure">
+                    <input disabled required class="form-control" type="text" name="birth" id="birth" placeholder="Enter Your Birth time..." autocomplete="off">
                 </div>
             </div>
         </div>
@@ -66,20 +66,26 @@
 `
             attention.custom({
                 msg: html,
-                title: "Choose your dates",
+                title: "Hẹn Ngày Xem",
 
                 willOpen: () => {
-                    const elem = document.getElementById('reservation-dates-modal');
-                    const rp = new DateRangePicker(elem, {
-                        format: 'yyyy-mm-dd',
-                        showOnFocus: true,
+                    const elem = document.getElementById('book');
+                    const rp = new flatpickr(elem, {
+                        dateFormat: "Y-m-d H:i",
                         minDate: new Date(),
+                        enableTime: true,
+                    })
+
+                    const elem2 = document.getElementById('birth');
+                    const rp2 = new flatpickr(elem2, {
+                        dateFormat: "Y-m-d H:i",
+                        enableTime: true,
                     })
                 },
 
                 didOpen: () => {
-                    document.getElementById('start').removeAttribute('disabled');
-                    document.getElementById('end').removeAttribute('disabled');
+                    document.getElementById('book').removeAttribute('disabled');
+                    document.getElementById('birth').removeAttribute('disabled');
 
                 },
 

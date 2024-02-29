@@ -14,22 +14,22 @@ func (m *testDBRepo) AllUsers() bool {
 // InsertReservation inserts a reservation into the database
 func (m *testDBRepo) InsertReservation(res models.Reservation) (int, error) {
 	// if the room id is 2, then fail; otherwise, pass
-	if res.RoomID == 2 {
+	if res.ServiceID == 2 {
 		return 0, errors.New("some error)")
 	}
 	return 1, nil
 }
 
 // InsertRoomRestriction inserts a room restriction into the database
-func (m *testDBRepo) InsertRoomRestriction(r models.RoomRestriction) error {
-	if r.RoomID == 1000 {
+func (m *testDBRepo) InsertRoomRestriction(r models.Restriction) error {
+	if r.ID == 1000 {
 		return errors.New("some error")
 	}
 	return nil
 }
 
-// SearchAvailabilityByDatesByRoomID returns true if availability exists for roomID, and false if no availability
-func (m *testDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time, roomID int) (bool, error) {
+// SearchAvailabilityByDatesByServiceID returns true if availability exists for ServiceID, and false if no availability
+func (m *testDBRepo) SearchAvailabilityByDatesByServiceID(start, end time.Time, ServiceID int) (bool, error) {
 	// set up a test time
 	layout := "2006-01-02"
 	str := "2049-12-31"
@@ -59,8 +59,8 @@ func (m *testDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time, roo
 }
 
 // SearchAvailabilityForAllRooms returns a slice of available rooms, if any, for given date range
-func (m *testDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]models.Room, error) {
-	var rooms []models.Room
+func (m *testDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]models.Service, error) {
+	var rooms []models.Service
 
 	// if the start date is after 2049-12-31, then return empty slice,
 	// indicating no rooms are available;
@@ -86,7 +86,7 @@ func (m *testDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]mode
 
 	// otherwise, put an entry into the slice, indicating that some room is
 	// available for search dates
-	room := models.Room{
+	room := models.Service{
 		ID: 1,
 	}
 	rooms = append(rooms, room)
@@ -95,8 +95,8 @@ func (m *testDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]mode
 }
 
 // GetRoomByID gets a room by id
-func (m *testDBRepo) GetRoomByID(id int) (models.Room, error) {
-	var room models.Room
+func (m *testDBRepo) GetRoomByID(id int) (models.Service, error) {
+	var room models.Service
 	if id > 2 {
 		return room, errors.New("some error")
 	}
@@ -156,33 +156,25 @@ func (m *testDBRepo) UpdateProcessedForReservation(id, processed int) error {
 	return nil
 }
 
-func (m *testDBRepo) AllRooms() ([]models.Room, error) {
-	var rooms []models.Room
-	rooms = append(rooms, models.Room{ID:1})
+func (m *testDBRepo) AllRooms() ([]models.Service, error) {
+	var rooms []models.Service
+	rooms = append(rooms, models.Service{ID: 1})
 	return rooms, nil
 }
 
 // GetRestrictionsForRoomByDate returns restrictions for a room by date range
-func (m *testDBRepo) GetRestrictionsForRoomByDate(roomID int, start, end time.Time) ([]models.RoomRestriction, error) {
-	var restrictions []models.RoomRestriction
+func (m *testDBRepo) GetRestrictionsForRoomByDate(ServiceID int, start, end time.Time) ([]models.Restriction, error) {
+	var restrictions []models.Restriction
 	// add a block
-	restrictions = append(restrictions, models.RoomRestriction{
-		ID:            1,
-		StartDate:     time.Now(),
-		EndDate:       time.Now().AddDate(0, 0, 1),
-		RoomID:        1,
-		ReservationID: 0,
-		RestrictionID: 2,
+	restrictions = append(restrictions, models.Restriction{
+		ID:          1,
+		BookingTime: time.Now(),
 	})
 
 	// add a reservation
-	restrictions = append(restrictions, models.RoomRestriction{
-		ID:            2,
-		StartDate:     time.Now().AddDate(0,0,2),
-		EndDate:       time.Now().AddDate(0, 0, 3),
-		RoomID:        1,
-		ReservationID: 1,
-		RestrictionID: 1,
+	restrictions = append(restrictions, models.Restriction{
+		ID:          2,
+		BookingTime: time.Now(),
 	})
 	return restrictions, nil
 }

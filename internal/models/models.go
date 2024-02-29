@@ -13,6 +13,7 @@ type User struct {
 	PaymentID     int
 	CustomerID    int
 	ReservationID int
+	AccessLevel   int
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
 }
