@@ -71,7 +71,7 @@ func (m *postgresDBRepo) InsertRoomRestriction(r models.Restriction) error {
 }
 
 // SearchAvailabilityByDatesByRoomID returns true if availability exists for roomID, and false if no availability
-func (m *postgresDBRepo) SearchAvailabilityByDatesByRoomID(start, end time.Time, roomID int) (bool, error) {
+func (m *postgresDBRepo) SearchAvailabilityByDatesByServiceID(start, end time.Time, roomID int) (bool, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -139,7 +139,7 @@ func (m *postgresDBRepo) SearchAvailabilityForAllRooms(start, end time.Time) ([]
 }
 
 // GetRoomByID gets a room by id
-func (m *postgresDBRepo) GetRoomByID(id int) (models.Service, error) {
+func (m *postgresDBRepo) GetServiceByID(id int) (models.Service, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
@@ -173,7 +173,7 @@ func (m *postgresDBRepo) GetUserByID(id int) (models.User, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
-	query := `select id, first_name, last_name, email, password, access_level, created_at, updated_at
+	query := `select id, user_name, email, password, payment_id, customer_id, reservation_id, access_level, created_at, updated_at
 			from users where id = $1`
 
 	row := m.DB.QueryRowContext(ctx, query, id)
@@ -205,12 +205,16 @@ func (m *postgresDBRepo) UpdateUser(u models.User) error {
 	defer cancel()
 
 	query := `
-		update users set first_name = $1, last_name = $2, email = $3, access_level = $4, updated_at = $5
+		update users set email = $1, password = $2, payment_id = $3, customer_id = $4, reservation_id = $5,
+		                 access_level = $6, updated_at = $7
 `
 
 	_, err := m.DB.ExecContext(ctx, query,
-		u.UserName,
 		u.Email,
+		u.Password,
+		u.PaymentID,
+		u.CustomerID,
+		u.ReservationID,
 		u.AccessLevel,
 		time.Now(),
 	)
